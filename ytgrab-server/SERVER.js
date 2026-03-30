@@ -1,85 +1,137 @@
-// YTGrab Backend Server
-// This file creates a small local web server on your computer
-// It listens for requests from the website (index.html) and runs yt-dlp
+// ╔══════════════════════════════════════════════════════════════╗
+// ║         YTGrab — Production Server (Render Ready)           ║
+// ║                                                             ║
+// ║  HOW IT WORKS:                                              ║
+// ║  Instead of saving files on the server (which doesn't work  ║
+// ║  on cloud), we STREAM the video bytes directly to the       ║
+// ║  browser → browser saves it to user's Downloads folder.     ║
+// ╚══════════════════════════════════════════════════════════════╝
 
-const express = require('express');   // web server framework
-const cors    = require('cors');       // allows website to talk to this server
-const { exec } = require('child_process'); // lets us run terminal commands
-const path   = require('path');       // helps build file paths correctly
-const os     = require('os');         // detects your OS home folder
+const express = require('express');
+const cors    = require('cors');
+const { spawn } = require('child_process');
+const path    = require('path');
 
-const app = express();
-app.use(cors());          // allow requests from any origin (your HTML file)
+const app  = express();
+const PORT = process.env.PORT || 3737;
+
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-// ────────────────────────────────────────────────
-// ROUTE 1: GET /info  →  fetch video details
-// When you paste a URL and click "Fetch", this runs
-// ────────────────────────────────────────────────
-app.get('/info', (req, res) => {
-  const url = req.query.url;  // get URL from request
-  if (!url) return res.status(400).json({ error: 'No URL provided' });
+// Serve index.html (for local use)
+app.use(express.static(path.join(__dirname)));
 
-  // Run yt-dlp to get video info as JSON (no download)
-  exec(`yt-dlp --dump-json --no-playlist "${url}"`, (err, stdout, stderr) => {
-    if (err) {
-      console.error('yt-dlp error:', stderr);
-      return res.status(500).json({ error: 'Could not fetch video info' });
+// ─────────────────────────────────────────────
+// /ping  →  connection check
+// ─────────────────────────────────────────────
+app.get('/ping', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// ─────────────────────────────────────────────
+// /info?url=...  →  video metadata
+// ─────────────────────────────────────────────
+app.get('/info', (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: 'No URL' });
+
+  console.log('📡 Info:', url);
+
+  const ytdlp = spawn('yt-dlp', [
+    '--dump-json',
+    '--no-playlist',
+    '--no-warnings',
+    url
+  ]);
+
+  let out = '', err = '';
+  ytdlp.stdout.on('data', d => out += d);
+  ytdlp.stderr.on('data', d => err += d);
+
+  ytdlp.on('close', code => {
+    if (code !== 0 || !out.trim()) {
+      console.error('yt-dlp info failed:', err);
+      return res.status(500).json({ error: 'Could not fetch video info. Is the URL correct?' });
     }
     try {
-      const data = JSON.parse(stdout);
-      res.json(data);  // send video info back to the website
-    } catch(e) {
-      res.status(500).json({ error: 'Failed to parse video data' });
+      res.json(JSON.parse(out));
+    } catch {
+      res.status(500).json({ error: 'Failed to parse response' });
     }
+  });
+
+  ytdlp.on('error', () => {
+    res.status(500).json({ error: 'yt-dlp not installed on server' });
   });
 });
 
-// ────────────────────────────────────────────────
-// ROUTE 2: GET /download  →  actually download the video
-// When you click "Download Now", this runs
-// ────────────────────────────────────────────────
-app.get('/download', (req, res) => {
+// ─────────────────────────────────────────────
+// /stream?url=...&quality=720p&format=mp4
+//
+// THIS IS THE KEY ROUTE:
+// Instead of saving to disk, we pipe yt-dlp's
+// output directly to the browser response.
+// Browser receives it as a file download.
+// ─────────────────────────────────────────────
+app.get('/stream', (req, res) => {
   const { url, quality, format } = req.query;
   if (!url) return res.status(400).json({ error: 'No URL' });
 
-  // Map quality labels to yt-dlp format codes
   const qualityMap = {
-    '360p': 'bestvideo[height<=360]+bestaudio/best[height<=360]',
-    '480p': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
-    '720p': 'bestvideo[height<=720]+bestaudio/best[height<=720]',
-    '1080p': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]',
+    '360p':  'bestvideo[height<=360][ext=mp4]+bestaudio[ext=m4a]/best[height<=360]',
+    '480p':  'bestvideo[height<=480][ext=mp4]+bestaudio[ext=m4a]/best[height<=480]',
+    '720p':  'bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720]',
+    '1080p': 'bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080]',
   };
 
-  const ytFmt = format === 'mp3'
-    ? 'bestaudio/best'
-    : (qualityMap[quality] || qualityMap['720p']);
+  const isAudio  = format === 'mp3';
+  const ytFormat = isAudio ? 'bestaudio/best' : (qualityMap[quality] || qualityMap['720p']);
+  const ext      = isAudio ? 'mp3' : 'mp4';
+  const mimeType = isAudio ? 'audio/mpeg' : 'video/mp4';
+  const filename = `YTGrab_${quality || 'best'}_${Date.now()}.${ext}`;
 
-  const ext      = format === 'mp3' ? 'mp3' : 'mp4';
-  const filename = `YTGrab_${Date.now()}.${ext}`;
-  const outPath  = path.join(os.homedir(), 'Downloads', filename);
+  console.log(`\n📥 Stream request: ${quality} ${format}`);
+  console.log('🔗 URL:', url);
 
-  // Tell the website we started (don't wait for it to finish)
-  res.json({ message: 'Download started!', file: outPath });
+  // Build yt-dlp args — output to stdout (-) so we can pipe it
+  const args = isAudio
+    ? ['-f', 'bestaudio/best', '-x', '--audio-format', 'mp3', '--audio-quality', '0', '-o', '-', '--no-warnings', url]
+    : ['-f', ytFormat, '--merge-output-format', 'mp4', '-o', '-', '--no-warnings', url];
 
-  // Build the yt-dlp command
-  const audioFlags = format === 'mp3'
-    ? '-x --audio-format mp3'
-    : '--merge-output-format mp4';
+  const ytdlp = spawn('yt-dlp', args);
 
-  const cmd = `yt-dlp -f "${ytFmt}" ${audioFlags} -o "${outPath}" "${url}"`;
-  console.log('Running:', cmd);
+  // Tell browser: "this is a file, save it with this name"
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.setHeader('Content-Type', mimeType);
+  res.setHeader('Transfer-Encoding', 'chunked');
 
-  exec(cmd, (err) => {
-    if (err) console.error('Download failed:', err.message);
-    else console.log('✅ Saved to:', outPath);
+  // Pipe yt-dlp stdout → browser (this is the streaming magic)
+  ytdlp.stdout.pipe(res);
+
+  ytdlp.stderr.on('data', d => console.log(d.toString()));
+
+  ytdlp.on('close', code => {
+    if (code === 0) console.log('✅ Stream complete:', filename);
+    else console.error('❌ Stream failed (code:', code, ')');
+  });
+
+  ytdlp.on('error', err => {
+    console.error('❌ yt-dlp error:', err.message);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'yt-dlp not found' });
+    }
+  });
+
+  // If user cancels download, kill yt-dlp
+  req.on('close', () => {
+    ytdlp.kill('SIGTERM');
+    console.log('🛑 Download cancelled by user');
   });
 });
 
-// ────────────────────────────────────────────────
-// Start the server on port 3737
-// ────────────────────────────────────────────────
-const PORT = 3737;
+// ─────────────────────────────────────────────
+// START
+// ─────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`\n✅ YTGrab backend running!\n   Open your index.html in a browser\n   Server: http://localhost:${PORT}\n`);
+  console.log(`\n✅ YTGrab running at http://localhost:${PORT}\n`);
 });
