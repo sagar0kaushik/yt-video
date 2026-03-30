@@ -615,165 +615,6 @@ h1 {
 .status-msg.ok { background: rgba(105,240,174,0.08); border: 1px solid rgba(105,240,174,0.2); color: rgba(105,240,174,0.9); display: flex; }
 .status-msg.warn { background: rgba(255,213,79,0.08); border: 1px solid rgba(255,213,79,0.2); color: rgba(255,213,79,0.9); display: flex; }
 
-/* ── SETUP GUIDE ── */
-.setup-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 6px;
-}
-
-.setup-title {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.setup-sub {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-
-/* Steps */
-.steps { display: flex; flex-direction: column; gap: 0; }
-
-.step {
-  display: flex;
-  gap: 0;
-  position: relative;
-}
-
-.step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 17px;
-  top: 36px;
-  bottom: -8px;
-  width: 1px;
-  background: linear-gradient(to bottom, var(--glass-border), transparent);
-}
-
-.step-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 18px;
-  padding-top: 2px;
-}
-
-.step-num {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--glass-border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-muted);
-  backdrop-filter: blur(8px);
-  flex-shrink: 0;
-}
-
-.step-body {
-  flex: 1;
-  padding-bottom: 28px;
-}
-
-.step-head {
-  font-size: 15px;
-  font-weight: 700;
-  margin-bottom: 5px;
-  margin-top: 6px;
-}
-
-.step-desc {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.65;
-  margin-bottom: 10px;
-}
-
-.step-desc b { color: rgba(255,255,255,0.75); font-weight: 600; }
-.step-desc code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(255,255,255,0.07); padding: 1px 6px; border-radius: 5px; }
-
-/* Code blocks */
-.code-wrap {
-  position: relative;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 12px;
-  overflow: hidden;
-  backdrop-filter: blur(8px);
-  margin-top: 8px;
-}
-
-.code-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.03);
-}
-
-.code-lang {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--text-subtle);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.copy-btn {
-  font-family: 'Outfit', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.copy-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
-
-.code-content {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12.5px;
-  line-height: 1.7;
-  padding: 14px 16px;
-  color: rgba(255,255,255,0.75);
-  overflow-x: auto;
-  white-space: pre;
-}
-
-/* Syntax highlights */
-.code-content .c { color: rgba(105,240,174,0.8); } /* green - strings/values */
-.code-content .k { color: rgba(179,157,219,0.9); } /* purple - keywords */
-.code-content .m { color: rgba(255,213,79,0.8); }  /* yellow - numbers */
-.code-content .comment { color: rgba(255,255,255,0.3); font-style: italic; }
-
-/* ── TIP BOX ── */
-.tip-box {
-  background: rgba(79,195,247,0.06);
-  border: 1px solid rgba(79,195,247,0.18);
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 13px;
-  color: rgba(79,195,247,0.85);
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  backdrop-filter: blur(8px);
-}
-
-.tip-box svg { width:15px;height:15px;flex-shrink:0;margin-top:1px; }
-
 /* ── FOOTER ── */
 footer {
   text-align: center;
@@ -920,81 +761,77 @@ footer {
     </div>
   </div>
 
- </div><!-- /wrap -->
+
+
+</div><!-- /wrap -->
 
 <footer>
-  <p class="foot-text">
-    YTGrab is a personal-use local tool. Please respect content creators and
-    <a href="https://www.youtube.com/t/terms" target="_blank">YouTube's Terms of Service</a>.
-    Only download content you have permission to.
-  </p>
+  <p class="foot-text">YTGrab is a personal-use local tool. Please respect content creators and <a href="https://www.youtube.com/t/terms" target="_blank">YouTube's Terms of Service</a>. Only download content you have permission to.</p>
 </footer>
 
 <script>
-// ────── CONFIG ──────
-// If opened via http://localhost:3737 (correct way), API calls are relative.
-// If opened as file:// (double-click), fall back to absolute URL.
-const API = (location.protocol === 'http:' && location.hostname === 'localhost')
-  ? ''                        // same origin — no prefix needed
-  : 'http://localhost:3737';  // cross-origin fallback
+// ────────────────────────────────────────────────────────
+// API base URL — auto-detects local vs Render deployment
+//
+// • Local:  open http://localhost:3737 → API = ''  (same origin)
+// • Render: site is served from Render URL → API = same Render URL
+//   Set window.YTGRAB_API in an env-injected meta tag if needed,
+//   otherwise it defaults to the current page's origin.
+// ────────────────────────────────────────────────────────
+const API = (() => {
+  // If there's a meta tag with a custom API url, use it
+  const meta = document.querySelector('meta[name="api-base"]');
+  if (meta) return meta.content.replace(/\/$/, '');
+  // Otherwise use same origin (works for both local and Render)
+  return window.location.origin === 'null' ? 'http://localhost:3737' : '';
+})();
 
-let selQ = '720p';
-let selFmt = 'mp4';
+let selQ    = '720p';
+let selFmt  = 'mp4';
 let vidData = null;
+let currentVidUrl = '';
 
 const QUALS = [
-  { res: '360p', name: 'Standard',  chip: 'sd',  label: 'SD' },
-  { res: '480p', name: 'Enhanced',  chip: 'sd',  label: 'SD+' },
-  { res: '720p', name: 'HD',        chip: 'hd',  label: 'HD' },
+  { res: '360p',  name: 'Standard', chip: 'sd',  label: 'SD'  },
+  { res: '480p',  name: 'Enhanced', chip: 'sd',  label: 'SD+' },
+  { res: '720p',  name: 'HD',       chip: 'hd',  label: 'HD'  },
   { res: '1080p', name: 'Full HD',  chip: 'fhd', label: 'FHD' },
 ];
 
-// ────── CHECK BACKEND ──────
+// ── CHECK BACKEND ──
 async function checkBackend() {
   try {
-    const res = await fetch(API + '/ping', { signal: AbortSignal.timeout(3000) });
-    if (res.ok) {
-      document.getElementById('conn-pill').style.display = 'inline-flex';
-    }
-  } catch(e) {
-    // Server not running — pill stays hidden, demo mode will kick in
-  }
+    const r = await fetch(API + '/ping', { signal: AbortSignal.timeout(4000) });
+    if (r.ok) document.getElementById('conn-pill').style.display = 'inline-flex';
+  } catch {}
 }
 checkBackend();
 
-// ────── PASTE ──────
+// ── PASTE ──
 async function pasteURL() {
   try {
-    const t = await navigator.clipboard.readText();
-    document.getElementById('url-input').value = t;
-  } catch(e) {
-    document.getElementById('url-input').focus();
-  }
+    document.getElementById('url-input').value = await navigator.clipboard.readText();
+  } catch { document.getElementById('url-input').focus(); }
 }
 
-// ────── VALIDATE ──────
+// ── VALIDATE ──
 function isYT(url) {
   return /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))[\w-]{11}/.test(url);
 }
-
 function showErr(msg) {
-  const b = document.getElementById('error-box');
   document.getElementById('error-txt').textContent = msg;
-  b.style.display = 'flex';
+  document.getElementById('error-box').style.display = 'flex';
 }
+function hideErr() { document.getElementById('error-box').style.display = 'none'; }
 
-function hideErr() {
-  document.getElementById('error-box').style.display = 'none';
-}
-
-// ────── FETCH VIDEO ──────
+// ── FETCH VIDEO INFO ──
 async function fetchVideo() {
   const url = document.getElementById('url-input').value.trim();
   hideErr();
+  if (!url)       { showErr('Please paste a YouTube URL first.'); return; }
+  if (!isYT(url)) { showErr('Not a valid YouTube URL. It should contain "youtube.com/watch?v=" or "youtu.be/".'); return; }
 
-  if (!url) { showErr('Please paste a YouTube URL first.'); return; }
-  if (!isYT(url)) { showErr('That doesn\'t look like a valid YouTube URL. It should contain "youtube.com/watch?v=" or "youtu.be/".'); return; }
-
+  currentVidUrl = url;
   const btn = document.getElementById('fetch-btn');
   btn.classList.add('loading');
   btn.disabled = true;
@@ -1002,72 +839,58 @@ async function fetchVideo() {
 
   try {
     const res = await fetch(`${API}/info?url=${encodeURIComponent(url)}`);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    vidData = data;
-    renderResult(data, url);
-  } catch(e) {
-    // Demo mode — show UI without real data
-    renderDemo(url);
+    if (!res.ok) throw new Error('Server error');
+    vidData = await res.json();
+    renderResult(vidData, url);
+  } catch {
+    // Demo mode when server not reachable
+    const id = url.match(/(?:v=|youtu\.be\/)([^&?]+)/)?.[1] || '';
+    vidData = {
+      title: 'Connect your server to see real video info here',
+      uploader: 'YouTube Channel',
+      duration: 0, view_count: 0,
+      thumbnail: id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : '',
+      _demo: true
+    };
+    renderResult(vidData, url);
   } finally {
     btn.classList.remove('loading');
     btn.disabled = false;
   }
 }
 
-function renderDemo(url) {
-  const id = url.match(/(?:v=|youtu\.be\/)([^&?]+)/)?.[1] || '';
-  vidData = {
-    title: 'Your video title will appear here once the backend is running',
-    uploader: 'YouTube Creator',
-    duration: 0,
-    view_count: 0,
-    thumbnail: id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : '',
-    _demo: true
-  };
-  renderResult(vidData, url);
-}
-
 function renderResult(data, url) {
   document.getElementById('vid-title').textContent = data.title || 'Unknown Title';
-  document.getElementById('tag-ch').textContent = data.uploader || data.channel || 'Unknown Channel';
-  document.getElementById('tag-dur').textContent = fmtDur(data.duration);
+  document.getElementById('tag-ch').textContent    = data.uploader || data.channel || 'Unknown';
+  document.getElementById('tag-dur').textContent   = fmtDur(data.duration);
   document.getElementById('tag-views').textContent = fmtViews(data.view_count);
 
-  const img = document.getElementById('thumb-img');
-  const ph  = document.getElementById('thumb-ph');
-  const thumb = data.thumbnail || (url.match(/(?:v=|youtu\.be\/)([^&?]+)/)?.[1]
-    ? `https://img.youtube.com/vi/${url.match(/(?:v=|youtu\.be\/)([^&?]+)/)[1]}/mqdefault.jpg` : '');
-
+  const img   = document.getElementById('thumb-img');
+  const ph    = document.getElementById('thumb-ph');
+  const vidId = url.match(/(?:v=|youtu\.be\/)([^&?]+)/)?.[1];
+  const thumb = data.thumbnail || (vidId ? `https://img.youtube.com/vi/${vidId}/mqdefault.jpg` : '');
   if (thumb) {
-    img.src = thumb;
-    img.style.display = 'block';
-    ph.style.display = 'none';
+    img.src = thumb; img.style.display = 'block'; ph.style.display = 'none';
     img.onerror = () => { img.style.display = 'none'; ph.style.display = 'flex'; };
   }
-
-  buildQGrid(data);
+  buildQGrid();
   document.getElementById('result-panel').style.display = 'block';
   document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function buildQGrid(data) {
+function buildQGrid() {
   const grid = document.getElementById('q-grid');
   grid.innerHTML = '';
   QUALS.forEach(q => {
-    const div = document.createElement('div');
-    div.className = `q-card ${q.res === selQ ? 'selected' : ''}`;
-    div.innerHTML = `
-      <div class="q-res">${q.res}</div>
-      <div class="q-name">${q.name}</div>
-      <span class="q-chip ${q.chip}">${q.label}</span>
-    `;
-    div.onclick = () => {
+    const d = document.createElement('div');
+    d.className = `q-card ${q.res === selQ ? 'selected' : ''}`;
+    d.innerHTML = `<div class="q-res">${q.res}</div><div class="q-name">${q.name}</div><span class="q-chip ${q.chip}">${q.label}</span>`;
+    d.onclick = () => {
       document.querySelectorAll('.q-card').forEach(c => c.classList.remove('selected'));
-      div.classList.add('selected');
+      d.classList.add('selected');
       selQ = q.res;
     };
-    grid.appendChild(div);
+    grid.appendChild(d);
   });
 }
 
@@ -1077,34 +900,40 @@ function pickFmt(btn, fmt) {
   selFmt = fmt;
 }
 
-// ────── DOWNLOAD ──────
-async function doDownload() {
-  const url = document.getElementById('url-input').value.trim();
-  const sm  = document.getElementById('status-msg');
-
-  sm.className = 'status-msg ok';
-  sm.innerHTML = `⏳ &nbsp;Downloading <b>${selQ} ${selFmt.toUpperCase()}</b>…`;
+// ── DOWNLOAD — uses /stream route ──
+// The server pipes yt-dlp output directly to the browser.
+// The browser receives it as a file download → saves to user's Downloads folder.
+// Works both locally and on Render.
+function doDownload() {
+  const sm = document.getElementById('status-msg');
 
   if (vidData?._demo) {
     sm.className = 'status-msg warn';
-    sm.innerHTML = `⚠️ &nbsp;Backend not running. Follow the setup guide below to start your local server first.`;
+    sm.innerHTML = `⚠️ &nbsp;Server not connected. Start <code>node server.js</code> and open <code>http://localhost:3737</code>`;
     return;
   }
 
-  try {
-    const res = await fetch(`${API}/download?url=${encodeURIComponent(url)}&quality=${selQ}&format=${selFmt}`);
-    const data = await res.json();
-    sm.innerHTML = `✅ &nbsp;Download started! File saving to <b>${data.file || 'your Downloads folder'}</b>`;
-  } catch(e) {
-    sm.className = 'status-msg warn';
-    sm.innerHTML = `⚠️ &nbsp;Could not connect to backend. Make sure <code>node server.js</code> is running.`;
-  }
+  // Build the /stream URL
+  const streamUrl = `${API}/stream?url=${encodeURIComponent(currentVidUrl)}&quality=${selQ}&format=${selFmt}`;
+
+  // Create a hidden <a> tag with the stream URL and click it.
+  // The server sends Content-Disposition: attachment → browser saves the file.
+  const a = document.createElement('a');
+  a.href = streamUrl;
+  // filename hint (browser may ignore in favour of server's Content-Disposition)
+  a.download = `YTGrab_${selQ}.${selFmt === 'mp3' ? 'mp3' : 'mp4'}`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  sm.className = 'status-msg ok';
+  sm.innerHTML = `⬇️ &nbsp;Download started! <b>${selQ} ${selFmt.toUpperCase()}</b> — check your browser's download bar. Large files take a moment to begin.`;
 }
 
-// ────── HELPERS ──────
+// ── HELPERS ──
 function fmtDur(s) {
   if (!s) return '—';
-  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = s%60;
   return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}` : `${m}:${String(sec).padStart(2,'0')}`;
 }
 function fmtViews(n) {
@@ -1114,83 +943,12 @@ function fmtViews(n) {
   if (n >= 1e3) return Math.round(n/1e3)+'K views';
   return n+' views';
 }
-
 function copyText(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.textContent;
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = orig, 1600);
+    const o = btn.textContent; btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = o, 1600);
   });
 }
-
-function copyServerCode() {
-  const code = `// YTGrab Backend Server (server.js)
-const express = require('express');
-const { exec } = require('child_process');
-const path = require('path');
-const os = require('os');
-
-const app = express();
-const PORT = 3737;
-
-// Serve index.html when browser visits http://localhost:3737
-app.use(express.static(path.join(__dirname)));
-
-// Health check — website uses this to detect if server is running
-app.get('/ping', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-// GET /info?url=<youtube-url> — fetch video info
-app.get('/info', (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: 'No URL provided' });
-  exec(\`yt-dlp --dump-json --no-playlist --no-warnings "\${url}"\`, { timeout: 30000 }, (err, stdout, stderr) => {
-    if (err) return res.status(500).json({ error: 'Could not fetch video info. Is yt-dlp installed?' });
-    try { res.json(JSON.parse(stdout)); }
-    catch(e) { res.status(500).json({ error: 'Failed to parse video data' }); }
-  });
-});
-
-// GET /download?url=...&quality=720p&format=mp4 — download video
-app.get('/download', (req, res) => {
-  const { url, quality, format } = req.query;
-  if (!url) return res.status(400).json({ error: 'No URL' });
-
-  const qualityMap = {
-    '360p':  'bestvideo[height<=360]+bestaudio/best[height<=360]',
-  '480p':  'bestvideo[height<=480]+bestaudio/best[height<=480]',
-  '720p':  'bestvideo[height<=720]+bestaudio/best[height<=720]',
-  '1080p': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]',
-  };
-
-  const isAudio  = format === 'mp3';
-  const ytFormat = isAudio ? 'bestaudio/best' : (qualityMap[quality] || qualityMap['720p']);
-  const ext      = isAudio ? 'mp3' : 'mp4';
-  const outPath  = path.join(os.homedir(), 'Downloads', \`YTGrab_\${Date.now()}.\${ext}\`);
-
-  const audioFlags = isAudio ? '-x --audio-format mp3 --audio-quality 0' : '--merge-output-format mp4';
-  const cmd = \`yt-dlp -f "\${ytFormat}" \${audioFlags} -o "\${outPath}" --no-warnings "\${url}"\`;
-
-  res.json({ message: 'Download started!', file: outPath });
-  exec(cmd, { timeout: 600000 }, (err) => {
-    if (err) console.error('Download failed:', err.message);
-    else console.log('Saved:', outPath);
-  });
-});
-
-app.listen(PORT, () => {
-  console.log(\`\\n✅ YTGrab running! Open: http://localhost:\${PORT}\\n\`);
-});`;
-
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById('server-copy-btn');
-    btn.textContent = '✓ Copied!';
-    setTimeout(() => btn.textContent = 'Copy All', 1600);
-  });
-}
-
-// Enter to fetch
 document.getElementById('url-input').addEventListener('keydown', e => {
   if (e.key === 'Enter') fetchVideo();
 });
