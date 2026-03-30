@@ -1,12 +1,3 @@
-// ╔══════════════════════════════════════════════════════════════╗
-// ║         YTGrab — Production Server (Render Ready)           ║
-// ║                                                             ║
-// ║  HOW IT WORKS:                                              ║
-// ║  Instead of saving files on the server (which doesn't work  ║
-// ║  on cloud), we STREAM the video bytes directly to the       ║
-// ║  browser → browser saves it to user's Downloads folder.     ║
-// ╚══════════════════════════════════════════════════════════════╝
-
 const express = require('express');
 const cors    = require('cors');
 const { spawn } = require('child_process');
@@ -20,17 +11,12 @@ app.use(express.json());
 
 // Serve index.html (for local use)
 app.use(express.static(path.join(__dirname)));
-
-// ─────────────────────────────────────────────
-// /ping  →  connection check
-// ─────────────────────────────────────────────
 app.get('/ping', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// ─────────────────────────────────────────────
+
 // /info?url=...  →  video metadata
-// ─────────────────────────────────────────────
 app.get('/info', (req, res) => {
   const url = req.query.url;
   if (!url) return res.status(400).json({ error: 'No URL' });
@@ -65,14 +51,7 @@ app.get('/info', (req, res) => {
   });
 });
 
-// ─────────────────────────────────────────────
-// /stream?url=...&quality=720p&format=mp4
-//
-// THIS IS THE KEY ROUTE:
-// Instead of saving to disk, we pipe yt-dlp's
-// output directly to the browser response.
-// Browser receives it as a file download.
-// ─────────────────────────────────────────────
+
 app.get('/stream', (req, res) => {
   const { url, quality, format } = req.query;
   if (!url) return res.status(400).json({ error: 'No URL' });
